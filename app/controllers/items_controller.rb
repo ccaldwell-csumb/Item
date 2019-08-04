@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-   before_action :set_item, only: [:update, :index, :order]
+   before_action :set_item, only: [:update, :index]
    
   # GET /items/:id
   def index
@@ -38,7 +38,11 @@ class ItemsController < ApplicationController
   
   # PUT /items/order
   def order
-      
+     begin
+        @item = Item.find(params[:itemId])
+     rescue ActiveRecord::RecordNotFound => e
+        @item = nil
+     end 
      respond_to do |format|
          if @item.nil?
              format.json { head :not_found}
@@ -74,6 +78,6 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:id, :description, :price, :stockQty)
+      params.require(:item).permit(:id, :description, :price, :stockQty, :itemId)
     end
 end

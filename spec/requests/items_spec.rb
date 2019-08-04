@@ -123,9 +123,7 @@ RSpec.describe "Item", type: :request do
         # update the item price and issue http put
         item['price']= 799.99
         put '/items', params: item.to_json, headers: headers 
-        expect(response).to have_http_status(200)
-        item_returned = JSON.parse(response.body)
-        expect(item_returned['price']).to eq item['price'].to_s
+        expect(response).to have_http_status(204)
         
         # verify db change
         itemdb = Item.find(item['id'])
@@ -146,7 +144,7 @@ RSpec.describe "Item", type: :request do
         headers = { "CONTENT_TYPE" => "application/json" ,
                      "ACCEPT" => "application/json"} 
         item = Hash.new
-        item[:id] = 1
+        item[:itemId] = 1
         put  '/items/order', params: item.to_json, headers: headers
         expect(response).to have_http_status(204)
         itemdb = Item.find(1)
@@ -158,7 +156,7 @@ RSpec.describe "Item", type: :request do
         headers = { "CONTENT_TYPE" => "application/json" ,
                      "ACCEPT" => "application/json"} 
         item = Hash.new
-        item[:id] = 3
+        item[:itemId] = 3
         put  '/items/order', params: item.to_json, headers: headers
         expect(response).to have_http_status(404)
         begin
@@ -174,7 +172,7 @@ RSpec.describe "Item", type: :request do
         headers = { "CONTENT_TYPE" => "application/json" ,
                      "ACCEPT" => "application/json"} 
         item = Hash.new
-        item[:id] = 2
+        item[:itemId] = 2
         put  '/items/order', params: item.to_json, headers: headers
         expect(response).to have_http_status(400)
       end
